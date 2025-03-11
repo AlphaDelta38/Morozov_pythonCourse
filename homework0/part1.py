@@ -1,61 +1,63 @@
-
 # Variant 3
 
 
-
-# В задании не указано какая именна должна быть матрица , если нужно можно сделать динамически заполняемой
-matrix = [
-    [4,1,2,9,5],
-    [1,1,2,2,2],
-    [8,2,2,2,2],
-    [0,1,3,8,1],
+MATRIX = [
+    [4, 1, 2, 0, 0],
+    [1, 1, 2, 2, 2],
+    [1, 1, 1, 1, 0],
+    [0, 1, 3, 8, 1],
 ]
 
 
 
+
 def main():
+    amount_of_zero_in_colum = get_amount_colum_with_zero()
+    row_index = get_row_largest_number_strike()
 
-    amount_largest_number_line = 0
-    index_largest_row_number = None
-    amount_colum_with_zero = 0
-    checked_colum = []
-
-
-    i = 0
-    index_of_row = 0
-
-    for row in matrix:
-        last_number = None
-        temp_largest_number_line = 0
+    print(f"Amount of colum with zero: {amount_of_zero_in_colum}")
+    print(f'Index of row with largest number strike: {row_index}')
 
 
-        while i < len(row):
-            if row[i] == 0 and i not in checked_colum:
-                checked_colum.append(i)
-                amount_colum_with_zero += 1
-            if last_number is not None and row[i] == last_number:
-                temp_largest_number_line+=1
+
+def get_amount_colum_with_zero():
+    amount_of_zero_elements = 0
+
+    for colum_index, _ in enumerate(MATRIX[0]):
+        for row_index, _ in enumerate(MATRIX):
+            if MATRIX[row_index][colum_index] == 0:
+                amount_of_zero_elements += 1
+                break
+
+    return amount_of_zero_elements
+
+
+
+
+def get_row_largest_number_strike():
+    current_strike = 1
+    largest_row = None
+
+    for i, row in enumerate(MATRIX):
+        temp_strike = 1
+
+        for index, _ in enumerate(row):
+            if index != 0 and row[index] == row[index-1]:
+                temp_strike += 1
             else:
-                temp_largest_number_line = 0
+                if temp_strike > current_strike:
+                    current_strike = temp_strike
+                    largest_row = i
+                temp_strike = 1
 
-            last_number = row[i]
-            i+=1
-
-
-        if amount_largest_number_line < temp_largest_number_line:
-            amount_largest_number_line = temp_largest_number_line
-            index_largest_row_number = index_of_row
-
-        index_of_row += 1
-        i = 0
-
-    print("Количество столбцов содержащих 0: " + str(amount_colum_with_zero) )
-    print("Index строки с самым длинным повторением одного и того же числа: " +str(index_largest_row_number))
+        if temp_strike > current_strike:
+            current_strike = temp_strike
+            largest_row = i
 
 
-main()
+    return largest_row
 
 
 
-
-
+if __name__ == '__main__':
+    main()
