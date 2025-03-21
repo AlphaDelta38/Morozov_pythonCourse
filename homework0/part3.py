@@ -7,24 +7,17 @@ MATRIX = [
     [ 1, 3, 1, 1],
     [ 0, 4, 0, 0],
     [ 0, 7, 0, 0],
-    [ 0,-2, 0, 0],
+    [ 0,-2, -3, 0],
     [ 0, 7, 0, 0],
 ]
 
 
-
 def main():
-
     amount_negative_number_tuple_list = get_amount_negative_number_indexes()
     saddle_amount = get_saddle_number_amount()
 
-
-    for row_index_2, _ in enumerate(MATRIX):
-        print(f"Amount of negative numbers in row {row_index_2 + 1}:  {sum(1 for element in amount_negative_number_tuple_list if element[0] == row_index_2)}")
-
-    print("\n")
-    print(f"Saddle amount: {saddle_amount}")
-
+    print(f'Negative numbers in row Counter : {amount_negative_number_tuple_list}')
+    print(f'Saddle amount: {saddle_amount}')
 
 
 
@@ -58,11 +51,20 @@ def get_saddle_number_amount():
 
 
 
+from collections import Counter
 
 def get_amount_negative_number_indexes():
-    return tuple((row_index, colum_index) for row_index, row in enumerate(MATRIX) for colum_index, num in enumerate(row) if 0 in row and num < 0)
-
-
+    return Counter(
+        list(element[0] for element in
+            tuple(
+                (row_index, colum_index, num)
+                for row_index, row in enumerate(MATRIX)
+                if 0 in row
+                for colum_index, num in enumerate(row)
+                if num < 0
+            )
+        )
+    )
 
 
 
