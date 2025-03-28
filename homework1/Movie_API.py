@@ -22,8 +22,10 @@ THE_MOVIE_DB_HEADERS = {
 
 CSV_COLUM_NAMES = ["Title", "Popularity", "Score", "Last_day_in_cinema"]
 DATA_FORMAT = "%Y-%m-%d"
+DATE_DELTA = relativedelta(months=2, days=14)
 
 Movie = namedtuple("Movie", ["title", "popularity", "score", "last_day_in_cinema"])
+
 
 class Movie_API:
 
@@ -42,12 +44,14 @@ class Movie_API:
         self.__movies = list(chain.from_iterable(movie["results"] for movie in response_pages))
 
     def get_movies_with_limit(self, limit, offset=0):
-        clamped_limit = min(max(limit, 1), self.__amount_of_pages * self.limit_on_page)
-        clamped_offset = min(max(offset, 0), self.__amount_of_pages * self.limit_on_page - clamped_limit)
+        movies_amount = self.__amount_of_pages * self.limit_on_page
+        clamped_limit = min(max(limit, 1), movies_amount)
+        clamped_offset = min(max(offset, 0), movies_amount - clamped_limit)
 
         return list(self.__movies[i] for i in range(offset - 1, clamped_limit + clamped_offset))
 
-    def get_all_movies(self):
+    @property
+    def movies(self):
         return self.__movies
 
     def get_movies_by_step(self, start, end, step):
@@ -60,26 +64,30 @@ class Movie_API:
         return temp_movies_list[0]["title"]
 
     def get_movies_with_keywords(self, keywords):
-        return list(filter(lambda movie: any(keyword.lower() in movie["overview"].lower() for keyword in keywords) , self.__movies))
+        return list(filter(lambda movie: any(keyword.lower() in movie["overview"].lower() for keyword in keywords),
+                           self.__movies))
 
-    def get_all_genre(self):
+    @staticmethod
+    def get_all_genre():
         return requests.get(GENRE_API_URL, headers=THE_MOVIE_DB_HEADERS).json()["genres"]
 
     def delete_movies_with_genres(self, genres):
         return list(filter(lambda movie: not any(x in genres for x in movie["genre_ids"]), self.__movies))
 
     def get_most_popular_genre_name(self, limit=0):
-        clamped_limit = min(max(limit, 1), 200)
+        clamped_limit = max(limit, 1)
         genres_used = list(chain.from_iterable(movies["genre_ids"] for movies in self.__movies))
         most_popular = Counter(genres_used).most_common(clamped_limit)
 
-        return list(map(lambda elements: tuple([self.get_genres_name_by_id(elements[0]), elements[1]]), most_popular))
+        return list(map(lambda elements: (self.get_genres_name_by_id(elements[0]), elements[1]), most_popular))
 
     def get_genres_name_by_id(self, genre_id):
-        return next((genre_obj["name"] for genre_obj in self.get_all_genre() if genre_obj["id"] == genre_id), "undefined")
+        genres = [genre_obj["name"] for genre_obj in self.get_all_genre() if genre_obj["id"] == genre_id]
+        return genres[0] if genres else "undefined"
 
     def get_grouped_movie_by_genre(self):
-        return [(genre["id"], [movie["title"] for movie in self.__movies if genre["id"] in movie["genre_ids"]]) for genre in self.get_all_genre()]
+        return [(genre["id"], [movie["title"] for movie in self.__movies if genre["id"] in movie["genre_ids"]])
+                for genre in self.get_all_genre()]
 
     def change_first_genre_for_each(self, id_for_change):
         copy = deepcopy(self.__movies)
@@ -89,15 +97,18 @@ class Movie_API:
 
         return self.__movies, copy,
 
+    @staticmethod
+    def __form_movie(movie):
+        last_day_in_cinema = datetime.strptime(movie["release_date"], DATA_FORMAT) + DATE_DELTA
+        return Movie(
+                    title=movie["title"],
+                    popularity=movie["popularity"],
+                    score=movie["vote_average"],
+                    last_day_in_cinema=last_day_in_cinema.strftime(DATA_FORMAT)
+                )
+
     def get_structured_films(self):
-        list_of_movies = []
-
-        delta = relativedelta(months=2, days=14)
-
-        for movie in self.get_all_movies():
-            last_day_in_cinema = datetime.strptime(movie["release_date"], DATA_FORMAT) + delta
-            list_of_movies.append(Movie(title=movie["title"], popularity=movie["popularity"], score=int(movie["vote_average"]), last_day_in_cinema=last_day_in_cinema.strftime(DATA_FORMAT)))
-
+        list_of_movies = [self.__form_movie(movie) for movie in self.__movies]
         return sorted(list_of_movies, key=lambda movies: (movies.score, movies.popularity), reverse=True)
 
     def write_structure_movies_data_in_csv(self, file_path):
@@ -105,6 +116,4 @@ class Movie_API:
             writer = csv.writer(file)
             movies_structured = self.get_structured_films()
             writer.writerow(CSV_COLUM_NAMES)
-
-            for movie in movies_structured:
-                writer.writerow([movie.title, movie.popularity, movie.score, movie.last_day_in_cinema])
+            writer.writerows(movies_structured)
