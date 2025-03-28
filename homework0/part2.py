@@ -16,8 +16,6 @@ MATRIX = [
 ]
 
 
-
-
 def main():
 
     summa_elements = sum(x for row_index, row in enumerate(MATRIX) for colum_num_index, x in enumerate(row) if colum_num_index > row_index)
@@ -28,7 +26,6 @@ def main():
     print(f'Amount of local minimum number in row and colum full way : {amount_of_local_minimum_number_full_way}')
     print(f'Amount of local minimum number in row and colum nearby way : {amount_of_local_minimum_number_nearby_way}')
     print(f'Amount of local minimum number in row and colum nearby way (extend) : {len(get_local_minimum_nearby_extend_way())}')
-
 
 
 def get_local_minimum_full_way():
@@ -65,7 +62,6 @@ def get_local_minimum_full_way():
     return len(local_minimum_number_indexes)
 
 
-
 def get_local_minimum_nearby_way():
     local_minimum_number_indexes = []
 
@@ -89,7 +85,6 @@ def find_element_in_matrix(matrix, row_i, colum_i):
         return None
 
     return matrix[row_i][colum_i]
-
 
 
 def get_local_minimum_nearby_extend_way():

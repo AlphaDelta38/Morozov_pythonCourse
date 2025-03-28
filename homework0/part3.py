@@ -1,3 +1,4 @@
+from collections import Counter
 
 
 #Variant 20
@@ -18,7 +19,6 @@ def main():
 
     print(f'Negative numbers in row Counter : {amount_negative_number_tuple_list}')
     print(f'Saddle amount: {saddle_amount}')
-
 
 
 def get_saddle_number_amount():
@@ -50,13 +50,10 @@ def get_saddle_number_amount():
     return len(saddle_number_indexes)
 
 
-
-from collections import Counter
-
 def get_amount_negative_number_indexes():
     return Counter(
         list(element[0] for element in
-            tuple(
+            (
                 (row_index, colum_index, num)
                 for row_index, row in enumerate(MATRIX)
                 if 0 in row
@@ -65,7 +62,6 @@ def get_amount_negative_number_indexes():
             )
         )
     )
-
 
 
 if __name__ == '__main__':
