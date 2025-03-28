@@ -13,11 +13,11 @@ import os
 load_dotenv()
 
 GENERAL_DOMAIN = os.getenv("GENERAL_DOMAIN_MOVIE_API_URL")
-MOVIE_API_URL = GENERAL_DOMAIN + os.getenv('MOVIE_API_URL')
-GENRE_API_URL = GENERAL_DOMAIN + os.getenv('GENRE_API_URL')
+MOVIE_API_URL = GENERAL_DOMAIN + os.getenv("MOVIE_API_URL")
+GENRE_API_URL = GENERAL_DOMAIN + os.getenv("GENRE_API_URL")
 THE_MOVIE_DB_HEADERS = {
     "accept": "application/json",
-    "Authorization": os.getenv('MOVIE_API_TOKEN')
+    "Authorization": os.getenv("MOVIE_API_TOKEN")
 }
 
 CSV_COLUM_NAMES = ["Title", "Popularity", "Score", "Last_day_in_cinema"]
@@ -101,7 +101,7 @@ class Movie_API:
         return sorted(list_of_movies, key=lambda movies: (movies.score, movies.popularity), reverse=True)
 
     def write_structure_movies_data_in_csv(self, file_path):
-        with open(file_path, mode='w', newline='', encoding='utf-8') as file:
+        with open(file_path, mode="w", newline="", encoding="utf-8") as file:
             writer = csv.writer(file)
             movies_structured = self.get_structured_films()
             writer.writerow(CSV_COLUM_NAMES)
