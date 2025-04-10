@@ -1,13 +1,5 @@
-from dotenv import load_dotenv
 import logging
-import os
 
-
-load_dotenv()
-
-
-#// API constants (from env) //#
-API_URL = os.getenv("API_URL")
 
 #// PATHS constants //#
 SAVE_FOLDER = "saves"
@@ -21,3 +13,14 @@ REGISTER_DATE_FORMAT = "%m-%d-%YT%H:%M:%S"
 LOG_LEVEL = logging.INFO
 LOG_FILE_NAME = "file.log"
 LOG_FORMAT = "%(asctime)s - %(levelname)s - %(name)s - %(message)s"
+
+#// CSV Keys Constants //#
+LOCATION_TIMEZONE_OFFSET_KEY = "location.timezone.offset"
+LOCATION_COUNTRY_KEY = "location.country"
+REGISTER_DATE_KEY = "registered.date"
+REGISTER_AGE_KEY = "registered.age"
+CURRENT_TIME_KEY = "current_time"
+NAME_TITLE_KEY = "name.title"
+DOB_DATE_KEY = "dob.date"
+DOB_AGE_KEY = "dob.age"
+ID_NAME_KEY = "id.name"

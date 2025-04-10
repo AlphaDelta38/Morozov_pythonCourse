@@ -1,6 +1,7 @@
+from pathlib import Path
+import shutil
 import csv
 import os
-import shutil
 
 
 def resolve_path(check_type, path, default):
@@ -26,12 +27,11 @@ def write_by_dict_csv(file_path, data):
         csv_writer.writeheader()
         csv_writer.writerows(data)
 
-    return data
-
 
 def move_file(file_path, destination_folder):
+    file_name = Path(file_path).name
     if os.path.isfile(file_path) and os.path.isdir(destination_folder):
-        destination_file_path = os.path.join(destination_folder, file_path.split("\\")[-1])
+        destination_file_path = os.path.join(destination_folder, file_name)
 
         if os.path.isfile(destination_file_path):
             os.remove(destination_file_path)
