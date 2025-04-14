@@ -15,41 +15,41 @@ import os
 
 def main():
     args = parse_args()
-    set_log = Logger(log_level=args.log_level)
+    log = Logger(log_level=args.log_level)
 
     file_path = f"{os.path.join(".", args.file_name)}.csv"
 
     try:
         download_user_data(args, file_path)
-        set_log.info("download successful")
+        log.info("download successful")
 
         transform_csv(file_path)
-        set_log.info("transform successful")
+        log.info("transform successful")
 
         os.makedirs(args.path, exist_ok=True)
 
         move_file(file_path, args.path)
-        set_log.info("move initial file successful")
+        log.info("move initial file successful")
 
         file_path = f"{os.path.join(args.path, args.file_name)}.csv"
 
         structure_dict = create_folder_structure(file_path, args.path)
-        set_log.info("Folder structure successful created")
+        log.info("Folder structure successful created")
 
         split_data_into_folders(args.path, structure_dict)
         Logger().info("data successfully entered into folder tree")
 
         delete_data_before_1960(args.path)
-        set_log.info("Delete data have been successful")
+        log.info("Delete data have been successful")
 
         string_tree = string_structure_tree(args.path)
-        set_log.info(string_tree)
+        log.info(string_tree)
 
         shutil.make_archive(args.file_name, 'zip', args.path)
-        set_log.info("Archive the tree successfully")
+        log.info("Archive the tree successfully")
 
         shutil.rmtree(args.path)
-        set_log.info("Deleted the tree successfully")
+        log.info("Deleted the tree successfully")
 
     except Exception as e:
         Logger().error(e)

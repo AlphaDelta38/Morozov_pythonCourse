@@ -14,7 +14,8 @@ set_logs = Logger()
 
 
 def download_user_data(args, file_path):
-    response = requests.get(f"{os.getenv("API_URL")}/?results={args.amount}&gender={args.gender or '{!!!!}'}&format=csv")
+    gender = f"&gender={args.gender}" if args.gender else ""
+    response = requests.get(f"{os.getenv("API_URL")}/?results={args.amount}{gender}&format=csv")
     with open(file_path, "w", encoding="utf-8") as file:
         file.write(response.text)
 
@@ -37,23 +38,21 @@ def create_folder_structure(file_path, dir_path):
     return result_dict
 
 
+def get_filename(user_data_rows):
+    avg_registered_age = sum(int(user_data[REGISTER_AGE_KEY]) for user_data in user_data_rows) / len(user_data_rows)
+
+    max_age = max([int(user[DOB_AGE_KEY]) for user in user_data_rows])
+
+    counter = Counter([user[ID_NAME_KEY] for user in user_data_rows])
+    most_common = counter.most_common(1)[0]
+
+    return f"max_age_{max_age}_avg_registered_{avg_registered_age}_popular_id_{most_common}.csv"
+
+
 def split_data_into_folders(dir_path, data):
-    for year_key, year_Value in data.items():
-        for country_key, user_data_rows in year_Value.items():
-            country_dir_path =  os.path.join(dir_path, year_key, country_key)
-
-            avg_registered_age = (sum(int(user_data[REGISTER_AGE_KEY]) for user_data in user_data_rows) /
-                                  len(user_data_rows))
-
-            max_age = max([int(user[DOB_AGE_KEY]) for user in user_data_rows])
-
-            counter = Counter([user[ID_NAME_KEY] for user in user_data_rows])
-            most_common = counter.most_common(1)[0]
-
-            file_path = os.path.join(
-                country_dir_path,
-                f"max_age_{max_age}_avg_registered_{avg_registered_age}_popular_id_{most_common}.csv"
-            )
+    for year_key, year_value in data.items():
+        for country_key, user_data_rows in year_value.items():
+            file_path =  os.path.join(dir_path, year_key, country_key, get_filename(user_data_rows))
 
             write_by_dict_csv(file_path, user_data_rows)
             Logger().debug(file_path)
@@ -64,14 +63,13 @@ def delete_data_before_1960(dir_path):
     for item in items:
         item_path = os.path.join(dir_path, item)
         if os.path.isdir(item_path) and int(item[:-1]) < 1960:
-                shutil.rmtree(item_path)
+            shutil.rmtree(item_path)
 
 
 def string_structure_tree(dir_path):
     result_structure_tree = "structure tree: \n"
-    full_structure_tree = list(os.walk(dir_path))
 
-    for items in full_structure_tree:
+    for items in os.walk(dir_path):
         path_dir, dirs, files = items
         t_index = len(path_dir.split("\\")) - 1
 

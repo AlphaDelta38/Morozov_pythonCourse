@@ -38,7 +38,7 @@ def move_file(file_path, destination_folder):
 
         shutil.move(file_path, destination_folder)
 
-        return os.path.join(destination_folder, file_path.split('\\')[-1])
+        return os.path.join(destination_folder, file_name)
     else:
         return file_path
 

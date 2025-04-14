@@ -1,5 +1,6 @@
-from constants import (LOG_FILE_NAME, LOG_FORMAT, LOG_LEVEL)
+from constants import (LOG_FILE_NAME, LOG_FORMAT, LOG_LEVEL, LOGGER_NAME)
 import logging
+
 
 
 class Logger:
@@ -16,7 +17,7 @@ class Logger:
         file_handler = logging.FileHandler(log_file_name)
         file_handler.setFormatter(logging.Formatter(log_format))
 
-        file_logger = logging.getLogger("file_logger")
+        file_logger = logging.getLogger(LOGGER_NAME)
         file_logger.setLevel(log_level)
         file_logger.addHandler(file_handler)
 
