@@ -13,7 +13,6 @@ class DBConnectController:
     :return: --> unified instance
     """
 
-
     _instance = None
     _lock = Lock()
     _in_use = 0
@@ -103,9 +102,8 @@ class DBConnectController:
         """
 
         def delayed():
-            time.sleep(2)
+            time.sleep(5)
             if self._disconnect_flag:
                 self.conn.close()
 
         Thread(target=delayed, daemon=True).start()
-

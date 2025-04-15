@@ -22,3 +22,15 @@ def is_valid_date(date_str, pattern):
         return True
     except ValueError:
         return False
+
+
+def get_milliseconds_from_date(date_str, date_format):
+    if not date_str:
+        return 0
+
+    past_date = datetime.strptime(date_str, date_format)
+
+    now = datetime.now()
+    delta = now - past_date
+
+    return int(delta.total_seconds() * 1000)

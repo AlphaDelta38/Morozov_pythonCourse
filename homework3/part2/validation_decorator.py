@@ -34,9 +34,8 @@ def validate(pipe_func):
 
             :return: --> response from wrapped_func
             """
-
             validated_data = pipe_func(*args, **kwargs)
-            response = wrapped_func(**validated_data)
+            response = wrapped_func(validated_data)
 
             return response
 

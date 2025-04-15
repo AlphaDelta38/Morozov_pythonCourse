@@ -131,7 +131,13 @@ class Sqlite_ORM:
                 {SELECT_TEMPLATE} {table_name.lower()} WHERE {search_by}
             '''
         )
-        return dict(connector.fetchone())
+
+        result = connector.fetchone()
+
+        if result is None:
+            return {}
+
+        return dict(result)
 
     @staticmethod
     @db_connector
@@ -152,11 +158,13 @@ class Sqlite_ORM:
 
         connector.execute(f'''
                 {SELECT_TEMPLATE} {table_name.lower()} {f"WHERE {search_by}" if search_by != "" else ""}
-                {f"LIMIT {limit}" if not limit else ""}
+                {f"LIMIT {limit}" if limit else ""}
             '''
         )
 
-        return dict(connector.fetchall())
+        result = connector.fetchall()
 
+        if result is None:
+            return []
 
-
+        return [dict(row) for row in result]

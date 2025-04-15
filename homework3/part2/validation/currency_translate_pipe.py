@@ -1,4 +1,4 @@
-from homework3.part2.error_handler import error_handler
+from homework3.part2.error_handler import message_handler
 import re
 
 
@@ -16,9 +16,7 @@ def translate_pipe(from_currency, to_currency, amount):
 
     pattern = r'^[A-Z]{3}$'
     if not re.match(pattern, from_currency.upper()) or not re.match(pattern, to_currency.upper()):
-        error_handler(400, "Invalid currency code, must contain 3 letters")
-    if amount <= 0:
-        error_handler(400, "Invalid amount, must be greater than 0")
+        raise message_handler(400, "Invalid currency code, must contain 3 letters")
 
     return {
         "amount": amount,
