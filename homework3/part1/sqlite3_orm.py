@@ -12,7 +12,7 @@ class Sqlite_ORM:
 
     @staticmethod
     @db_connector
-    def init_table(table_name, fields, add, connector):
+    def init_table(table_name, fields, connector, add=None):
         """
         description:
         connect with db, transform data to SQL command and execute them
@@ -24,6 +24,9 @@ class Sqlite_ORM:
 
         :return: --> void
         """
+
+        if add:
+            add = []
 
         connector.execute(f'''
             {CREATE_TEMPLATE} {table_name.lower()} 

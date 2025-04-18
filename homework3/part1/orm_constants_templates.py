@@ -21,5 +21,3 @@ ENUM = lambda key, enums, additional = "": f"CHECK ({key} IN ({', '.join(map(lam
 UNIQUES = lambda tables: f", UNIQUE({', '.join(tables)})"
 VARCHAR = lambda n: f"VARCHAR({max(min(255, n), 1)})"
 DEFAULT = lambda value: f"DEFAULT {value}"
-
-

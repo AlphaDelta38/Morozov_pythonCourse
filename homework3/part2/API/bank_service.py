@@ -1,22 +1,22 @@
+from homework3.part2.API.service_controller import ServiceController
 from homework3.part2.validation.bank_pipe import bank_pipe
 from homework3.part2.validation_decorator import validate
 from homework3.part2.error_handler import message_handler
 from homework3.part1.sqlite3_orm import Sqlite_ORM
 from homework3.utils import read_dict_csv
 
+colum_name = "bank"
 
-def bank_service():
+
+class BankService(ServiceController):
     """
     description:
     service which use validation decorator and pipes for validation data,
     also realize CRUD pattern
 
-    :return: dict of methods
     """
 
-    colum_name = "bank"
-
-
+    @staticmethod
     @validate(bank_pipe)
     def create(bank_data):
         """
@@ -30,7 +30,7 @@ def bank_service():
 
         return message_handler(200,"successfully created bank").data
 
-
+    @staticmethod
     def create_many(csv_file_path):
         """
         description:
@@ -44,7 +44,7 @@ def bank_service():
 
         return message_handler(200, "successfully created banks").data
 
-
+    @staticmethod
     @validate(bank_pipe)
     def update(new_date):
         """
@@ -58,7 +58,7 @@ def bank_service():
 
         return message_handler(200, "successfully updated bank").data
 
-
+    @staticmethod
     def get_one(condition):
         """
         description:
@@ -73,7 +73,7 @@ def bank_service():
             Sqlite_ORM.get_one(colum_name, condition)
         ).data
 
-
+    @staticmethod
     def get_many(condition="", limit=0):
         """
         description:
@@ -88,7 +88,7 @@ def bank_service():
             Sqlite_ORM.get_many(colum_name, search_by=condition, limit=limit)
         ).data
 
-
+    @staticmethod
     def delete(input_id):
         """
         description:
@@ -102,13 +102,3 @@ def bank_service():
         Sqlite_ORM.delete(colum_name,f"id = {input_id}")
 
         return message_handler(200,  "successfully deleted").data
-
-
-    return {
-        "create": create,
-        "creates": create_many,
-        "update": update,
-        "delete": delete,
-        "get": get_one,
-        "gets": get_many,
-    }

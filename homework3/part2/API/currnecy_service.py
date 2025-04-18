@@ -1,4 +1,5 @@
 from homework3.part2.validation.currency_translate_pipe import translate_pipe
+from homework3.part2.API.service_controller import ServiceController
 from homework3.part2.validation_decorator import validate
 from homework3.part2.error_handler import message_handler
 from dotenv import load_dotenv
@@ -7,20 +8,18 @@ import os
 
 
 load_dotenv()
+base_currency_api_url = f"{os.getenv("BASE_CURRENCY_API_URL")}?apikey={os.getenv("CURRENCY_API_KEY")}"
 
 
-def currency_service():
+class CurrencyService(ServiceController):
     """
     description:
     service which use validation decorator and pipes for validation data,
     also realize CRUD pattern
 
-    :return: dict of methods
     """
 
-    base_currency_api_url = f"{os.getenv("BASE_CURRENCY_API_URL")}?apikey={os.getenv("CURRENCY_API_KEY")}"
-
-
+    @staticmethod
     @validate(translate_pipe)
     def translate(data):
         """
@@ -37,8 +36,3 @@ def currency_service():
             "successfully deleted",
             amount * (response["data"][to_currency] / response["data"][from_currency])
         ).data
-
-
-    return {
-        "translate": translate,
-    }

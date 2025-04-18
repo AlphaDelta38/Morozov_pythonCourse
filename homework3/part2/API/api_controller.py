@@ -1,17 +1,17 @@
 from homework3.part2.error_handler import CustomException, message_handler
-from homework3.part2.API.transaction_service import transaction_service
-from homework3.part2.API.currnecy_service import currency_service
-from homework3.part2.API.account_service import account_service
-from homework3.part2.API.user_service import user_service
-from homework3.part2.API.bank_service import bank_service
+from homework3.part2.API.transaction_service import TransactionService
+from homework3.part2.API.currnecy_service import CurrencyService
+from homework3.part2.API.account_service import AccountService
+from homework3.part2.API.user_service import UserService
+from homework3.part2.API.bank_service import BankService
 
 
 API_PATH = {
-    "transaction": transaction_service(),
-    "currency": currency_service(),
-    "account": account_service(),
-    "user": user_service(),
-    "bank": bank_service()
+    "transaction": TransactionService().controller,
+    "currency": CurrencyService().controller,
+    "account": AccountService().controller,
+    "user": UserService().controller,
+    "bank": BankService().controller
 }
 
 
@@ -29,7 +29,7 @@ def api_controller(path, data):
 
     try:
         service, action = path.split("/")
-        return API_PATH[service][action](**data)
+        return API_PATH[service](action, **data)
     except Exception as e:
         error = e if isinstance(e, CustomException) else message_handler(500, str(e))
         raise error

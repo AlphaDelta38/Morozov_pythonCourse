@@ -1,5 +1,6 @@
 from schemas.db_schemas import DB_SCHEMAS
 from sqlite3_orm import Sqlite_ORM
+from dataclasses import asdict
 import os
 
 
@@ -17,7 +18,9 @@ def initial_db_setup(unique_user_fullname_flag):
         os.remove("default.db")
 
     for schema in DB_SCHEMAS:
-        if not unique_user_fullname_flag and schema[0] == "User":
-            Sqlite_ORM.init_table(schema[0], schema[1], [])
-        else:
-            Sqlite_ORM.init_table(*schema)
+        dict_schema = asdict(schema)
+
+        if not unique_user_fullname_flag and schema.table_name == "User":
+            dict_schema.popitem()
+
+        Sqlite_ORM.init_table(*dict_schema)

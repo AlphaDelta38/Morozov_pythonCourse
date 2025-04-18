@@ -1,3 +1,4 @@
+from homework3.part2.API.service_controller import ServiceController
 from homework3.part2.validation.user_pipe import user_pipe
 from homework3.part2.validation_decorator import validate
 from homework3.part2.error_handler import message_handler
@@ -5,18 +6,18 @@ from homework3.part1.sqlite3_orm import Sqlite_ORM
 from homework3.utils import read_dict_csv
 
 
-def user_service():
+colum_name = "user"
+
+
+class UserService(ServiceController):
     """
     description:
     service which use validation decorator and pipes for validation data,
     also realize CRUD pattern
 
-    :return: dict of methods
     """
 
-    colum_name = "user"
-
-
+    @staticmethod
     @validate(user_pipe)
     def create(user_data):
         """
@@ -30,7 +31,7 @@ def user_service():
 
         return message_handler( 200,  "successfully created user").data
 
-
+    @staticmethod
     def create_many(csv_file_path):
         """
         description:
@@ -45,7 +46,7 @@ def user_service():
 
         return message_handler( 200,  "successfully created users").data
 
-
+    @staticmethod
     @validate(user_pipe)
     def update(new_date):
         """
@@ -60,7 +61,7 @@ def user_service():
 
         return message_handler( 200,  "successfully updated user").data
 
-
+    @staticmethod
     def delete(input_id):
         """
         description:
@@ -75,7 +76,7 @@ def user_service():
 
         return message_handler( 200,  "successfully deleted user").data
 
-
+    @staticmethod
     def get_one(condition):
         """
         description:
@@ -90,7 +91,7 @@ def user_service():
             Sqlite_ORM.get_one(colum_name, condition)
         ).data
 
-
+    @staticmethod
     def get_many(condition="", limit=0):
         """
         description:
@@ -104,13 +105,3 @@ def user_service():
             "successfully got many user",
             Sqlite_ORM.get_many(colum_name, search_by=condition, limit=limit)
         ).data
-
-
-    return {
-        "create": create,
-        "creates": create_many,
-        "update": update,
-        "delete": delete,
-        "get": get_one,
-        "gets": get_many,
-    }

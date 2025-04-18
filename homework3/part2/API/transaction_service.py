@@ -1,20 +1,21 @@
+from homework3.part2.API.service_controller import ServiceController
 from homework3.part2.error_handler import message_handler
 from homework3.part1.sqlite3_orm import Sqlite_ORM
 from homework3.utils import read_dict_csv
 
 
-def transaction_service():
+colum_name = "transactions"
+
+
+class TransactionService(ServiceController):
     """
     description:
     service which use validation decorator and pipes for validation data,
     also realize CRUD pattern
 
-    :return: dict of methods
     """
 
-    colum_name = "transactions"
-
-
+    @staticmethod
     def create(transaction_data):
         """
         description:
@@ -27,8 +28,7 @@ def transaction_service():
 
         return message_handler(200, "successfully created transaction").data
 
-
-
+    @staticmethod
     def create_many(csv_file_path):
         """
         description:
@@ -42,7 +42,7 @@ def transaction_service():
 
         return message_handler(200, "successfully created many transaction").data
 
-
+    @staticmethod
     def update(new_date):
         """
         description:
@@ -57,7 +57,7 @@ def transaction_service():
 
         return message_handler(200, "successfully updated transaction").data
 
-
+    @staticmethod
     def delete(input_id):
         """
         description:
@@ -72,7 +72,7 @@ def transaction_service():
 
         return message_handler(200, "successfully deleted transaction").data
 
-
+    @staticmethod
     def get_one(condition):
         """
         description:
@@ -87,7 +87,7 @@ def transaction_service():
             Sqlite_ORM.get_one(colum_name, condition)
         ).data
 
-
+    @staticmethod
     def get_many(condition="", limit=0):
         """
         description:
@@ -101,13 +101,3 @@ def transaction_service():
             "successfully got many transaction",
             Sqlite_ORM.get_many(colum_name, search_by=condition, limit=limit)
         ).data
-
-
-    return {
-        "create": create,
-        "creates": create_many,
-        "update": update,
-        "delete": delete,
-        "get": get_one,
-        "gets": get_many,
-    }
