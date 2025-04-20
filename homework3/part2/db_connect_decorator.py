@@ -10,7 +10,6 @@ def db_connector(func):
 
     :return: --> wrapper func
     """
-
     def wrapper(*args, **kwargs):
         """
         description:

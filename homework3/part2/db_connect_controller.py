@@ -60,9 +60,6 @@ class DBConnectController:
         with self._lock:
             if self.conn is None:
                 self._connect()
-            self._in_use += 1
-
-            self._disconnect_flag = False
 
         return self.conn.cursor()
 
@@ -87,23 +84,6 @@ class DBConnectController:
         """
 
         with self._lock:
-            if self._in_use > 0:
-                self._in_use -= 1
-            if self._in_use == 0:
-                self.delay_disconnect()
-                self._disconnect_flag = True
+            self.conn.close()
+            self.conn = None
 
-    def delay_disconnect(self):
-        """
-        description:
-        launches async await logic, for check if flag  is true, then db connection is closed
-
-        :return: --> void
-        """
-
-        def delayed():
-            time.sleep(5)
-            if self._disconnect_flag:
-                self.conn.close()
-
-        Thread(target=delayed, daemon=True).start()

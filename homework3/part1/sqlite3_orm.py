@@ -129,7 +129,6 @@ class Sqlite_ORM:
 
         :return: --> one row from table by condition
         """
-
         connector.execute(f'''
                 {SELECT_TEMPLATE} {table_name.lower()} WHERE {search_by}
             '''

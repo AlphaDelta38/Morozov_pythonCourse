@@ -31,5 +31,6 @@ def api_controller(path, data):
         service, action = path.split("/")
         return API_PATH[service](action, **data)
     except Exception as e:
+        print("error", e)
         error = e if isinstance(e, CustomException) else message_handler(500, str(e))
         raise error

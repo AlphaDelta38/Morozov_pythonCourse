@@ -69,7 +69,7 @@ class BankService(ServiceController):
 
         return message_handler(
             200,
-            "successfully get one  bank",
+            "successfully get one bank",
             Sqlite_ORM.get_one(colum_name, condition)
         ).data
 

@@ -1,4 +1,4 @@
-from constants import DISCOUNT, USER_BIRTHDAY_FORMAT, DATE_FORMAT, TRANSACTION_DATETIME_FORMAT
+from homework3.part1.constants import DISCOUNT, USER_BIRTHDAY_FORMAT, DATE_FORMAT, TRANSACTION_DATETIME_FORMAT
 from homework3.utils import get_milliseconds_from_date, clean_text
 from homework3.part2.API.api_controller import api_controller
 from homework3.part2.API.api_constants_endpoints import (
@@ -59,7 +59,7 @@ def get_random_discount_for_users():
 def get_users_with_debts():
     """
     description:
-    check all user on thei amount in account which < 0
+    check all user on their amount in account which < 0
 
     :return: --> user with debts
     """
@@ -89,7 +89,9 @@ def get_most_bank_by_capital_using():
     accounts = api_controller(ACCOUNT_GET_ALL_ENDPOINT,{})["response"]
 
     bank_sums = {}
+
     for account in accounts:
+        time.sleep(4)
         amount_in_usd = api_controller(CURRENCY_TRANSLATE_ENDPOINT,{
             "amount": account["amount"],
             "to_currency": "USD",
@@ -101,14 +103,12 @@ def get_most_bank_by_capital_using():
             bank_sums[bank_id] = bank_sums[bank_id] + amount_in_usd
         else:
             bank_sums[bank_id] = account["amount"]
-        time.sleep(4)
 
-        bank_id_of_max = max(bank_sums, key=bank_sums.get)
-
-        bank_with_max_capital = api_controller(BANK_GET_ONE_ENDPOINT,
+    bank_id_of_max = max(bank_sums, key=bank_sums.get)
+    bank_with_max_capital = api_controller(BANK_GET_ONE_ENDPOINT,
         {"condition": f"id = {bank_id_of_max}"})["response"]
 
-        return bank_with_max_capital["name"]
+    return bank_with_max_capital["name"]
 
 
 def get_bank_with_oldest_client():
@@ -163,7 +163,7 @@ def get_highest_number_of_unique_user_bank():
         else:
             bank_and_users_id[sender_bank] = [transaction["account_sender_id"]]
 
-    return max(bank_and_users_id, key=lambda user_ids: len(user_ids))
+    return max(bank_and_users_id, key=lambda bank_key: len(bank_and_users_id[bank_key]))
 
 
 def get_transaction_information_by_user(fullname, from_date, to_date):
@@ -200,3 +200,6 @@ def get_transaction_information_by_user(fullname, from_date, to_date):
     return [transaction for transaction in transactions \
             if from_date >= get_milliseconds_from_date(transaction["datetime"], TRANSACTION_DATETIME_FORMAT) >= to_date
             ]
+
+
+get_highest_number_of_unique_user_bank()

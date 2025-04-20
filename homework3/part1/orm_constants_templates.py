@@ -18,6 +18,6 @@ REAL = "REAL"
 
 ## // functions Attribute constants // ##
 ENUM = lambda key, enums, additional = "": f"CHECK ({key} IN ({', '.join(map(lambda x: f'\"{x}\"', enums))}) {additional})"
-UNIQUES = lambda tables: f", UNIQUE({', '.join(tables)})"
+UNIQUES = lambda tables: f"UNIQUE({', '.join(tables)})"
 VARCHAR = lambda n: f"VARCHAR({max(min(255, n), 1)})"
 DEFAULT = lambda value: f"DEFAULT {value}"
