@@ -21,7 +21,7 @@ jobs:
           pip install prospector[with_everything] pytest
       - name: linter
         run:
-          prospector homework4 --profile .prospector.yaml
+          prospector homework3 --profile .prospector.yaml
       - name: unit-tests
         run:
           pytest
