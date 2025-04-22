@@ -1,4 +1,4 @@
-from homework5.test.training.functions import (
+from homework4.test.training.functions import (
     process_mock_object,
     run_data_pipeline,
     check_even_odd,
@@ -66,7 +66,7 @@ def test_divide_numbers(input_data, expected):
     assert result == expected
 
 
-@patch("homework5.test.training.functions.requests.get")
+@patch("homework4.test.training.functions.requests.get")
 def test_check_even_odd(mock_req):
     mock_response_1 = MagicMock()
     mock_response_1.json.return_value = {"results": [{"value": 2}]}

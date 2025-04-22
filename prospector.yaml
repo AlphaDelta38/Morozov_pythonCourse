@@ -1,0 +1,36 @@
+inherits:
+  - strictness_high
+
+
+ignore:
+  - venv
+  - test
+  - .pytest_cache/
+
+
+output-format: grouped
+
+
+test-warnings: false
+doc-warnings: false
+
+
+autodetect: false
+
+
+pep8:
+    run: true
+    options:
+        max-line-length: 120
+
+
+pylint:
+    run: true
+    options:
+        max-line-length: 120
+        ignored-classes: pytest
+
+    disable:
+        - C0302
+        - W0142
+        - W0141
