@@ -1,8 +1,14 @@
-from homework3.part1.orm_constants_templates import *
+from homework3.part1.orm_constants_templates import (
+    CREATE_TEMPLATE,
+    INSERT_TEMPLATE,
+    UPDATE_TEMPLATE,
+    DELETE_TEMPLATE,
+    SELECT_TEMPLATE
+)
 from homework3.part2.db_connect_decorator import db_connector
 
 
-class Sqlite_ORM:
+class SQLite3ORM:
     """
     description:
     converts input data to SQL command and execute them ,that means of realize ORM system
@@ -31,9 +37,8 @@ class Sqlite_ORM:
         connector.execute(f'''
             {CREATE_TEMPLATE} {table_name.lower()} 
             ({", ".join([f"{key} {" ".join(value)}" for key, value in fields.items()])}
-             {", ".join(add)}
-            )
-        ''')
+            {", ".join(add)})'''
+        )
 
     @staticmethod
     @db_connector
@@ -51,8 +56,10 @@ class Sqlite_ORM:
         """
 
         connector.execute(f'''
-            {INSERT_TEMPLATE} {table_name.lower()} ({", ".join(data.keys())}) VALUES ({", ".join(["?"] * len(data.keys()))})
-        ''', list(data.values()))
+            {INSERT_TEMPLATE} {table_name.lower()} ({", ".join(data.keys())})
+            VALUES ({", ".join(["?"] * len(data.keys()))})''',
+            list(data.values())
+        )
 
     @staticmethod
     @db_connector
@@ -70,8 +77,10 @@ class Sqlite_ORM:
         """
 
         connector.executemany(f'''
-            {INSERT_TEMPLATE} {table_name.lower()} ({", ".join(data[0].keys())}) VALUES ({", ".join(["?"] * len(data[0].keys()))})
-        ''', list(list(row.values()) for row in data))
+            {INSERT_TEMPLATE} {table_name.lower()} ({", ".join(data[0].keys())}) 
+            VALUES ({", ".join(["?"] * len(data[0].keys()))})''',
+            list(list(row.values()) for row in data)
+        )
 
     @staticmethod
     @db_connector
@@ -90,9 +99,9 @@ class Sqlite_ORM:
         """
 
         connector.execute(f'''
-               {UPDATE_TEMPLATE} {table_name.lower()} SET {", ".join(f"{key} = {f"\"{value}\""}" for key, value in new_date.items())}
-               WHERE {search_by}
-            '''
+            {UPDATE_TEMPLATE} {table_name.lower()} SET 
+            {", ".join(f"{key} = {f"\"{value}\""}" for key, value in new_date.items())}
+            WHERE {search_by}'''
         )
 
     @staticmethod
@@ -110,10 +119,7 @@ class Sqlite_ORM:
         :return: --> void
         """
 
-        connector.execute(f'''
-                {DELETE_TEMPLATE} {table_name.lower()} WHERE {search_by}
-            '''
-        )
+        connector.execute(f'''{DELETE_TEMPLATE} {table_name.lower()} WHERE {search_by}''')
 
     @staticmethod
     @db_connector
@@ -129,10 +135,7 @@ class Sqlite_ORM:
 
         :return: --> one row from table by condition
         """
-        connector.execute(f'''
-                {SELECT_TEMPLATE} {table_name.lower()} WHERE {search_by}
-            '''
-        )
+        connector.execute(f'''{SELECT_TEMPLATE} {table_name.lower()} WHERE {search_by}''')
 
         result = connector.fetchone()
 
@@ -143,7 +146,7 @@ class Sqlite_ORM:
 
     @staticmethod
     @db_connector
-    def get_many(table_name, connector, search_by="", limit = 0, ):
+    def get_many(table_name, connector, search_by="", limit=0):
         """
         description:
         connect with db, transform data to SQL command and execute them
@@ -154,14 +157,12 @@ class Sqlite_ORM:
         :param limit: limit of return rows
         :param connector: db connection
 
-
         :return: --> many rows from table by condition
         """
 
         connector.execute(f'''
-                {SELECT_TEMPLATE} {table_name.lower()} {f"WHERE {search_by}" if search_by != "" else ""}
-                {f"LIMIT {limit}" if limit else ""}
-            '''
+            {SELECT_TEMPLATE} {table_name.lower()} {f"WHERE {search_by}" if search_by != "" else ""}
+            {f"LIMIT {limit}" if limit else ""}'''
         )
 
         result = connector.fetchall()

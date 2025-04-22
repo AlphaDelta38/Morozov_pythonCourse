@@ -1,6 +1,5 @@
-from threading import Lock, Thread
+from threading import Lock
 import sqlite3
-import time
 import os
 
 
@@ -17,6 +16,10 @@ class DBConnectController:
     _lock = Lock()
     _in_use = 0
     _disconnect_flag = False
+
+    def __init__(self):
+        self.conn = None
+        self.cursor = None
 
     def __new__(cls):
         """
@@ -86,4 +89,3 @@ class DBConnectController:
         with self._lock:
             self.conn.close()
             self.conn = None
-

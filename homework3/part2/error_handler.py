@@ -4,7 +4,7 @@ class CustomException(Exception):
         super().__init__(data["message"])
 
 
-def message_handler(status, message, response = ()):
+def message_handler(status, message, response=()):
     """"
     description:
     take status, and message for throw error
@@ -16,4 +16,4 @@ def message_handler(status, message, response = ()):
     :return: --> void
     """
 
-    return CustomException({"status":status, "message":message, "response": response})
+    return CustomException({"status": status, "message": message, "response": response})

@@ -8,7 +8,7 @@ import os
 
 
 load_dotenv()
-base_currency_api_url = f"{os.getenv("BASE_CURRENCY_API_URL")}?apikey={os.getenv("CURRENCY_API_KEY")}"
+BASE_CURRENCY_API_URL = f"{os.getenv("BASE_CURRENCY_API_URL")}?apikey={os.getenv("CURRENCY_API_KEY")}"
 
 
 class CurrencyService(ServiceController):
@@ -29,7 +29,10 @@ class CurrencyService(ServiceController):
         """
 
         amount, to_currency, from_currency = data.values()
-        response = requests.get(f"{base_currency_api_url}&currencies={",".join([from_currency, to_currency])}").json()
+        response = requests.get(
+            f"{BASE_CURRENCY_API_URL}&currencies={",".join([from_currency, to_currency])}",
+            timeout=10
+        ).json()
 
         return message_handler(
             200,

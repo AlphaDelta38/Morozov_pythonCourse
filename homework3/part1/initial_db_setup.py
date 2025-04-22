@@ -1,7 +1,7 @@
 from dataclasses import asdict
 import os
 from schemas.db_schemas import DB_SCHEMAS
-from sqlite3_orm import Sqlite_ORM
+from sqlite3_orm import SQLite3ORM
 
 
 def initial_db_setup(unique_user_fullname_flag):
@@ -23,4 +23,4 @@ def initial_db_setup(unique_user_fullname_flag):
         if not unique_user_fullname_flag and schema.table_name == "User":
             dict_schema.popitem()
 
-        Sqlite_ORM.init_table(*dict_schema)
+        SQLite3ORM.init_table(*dict_schema)

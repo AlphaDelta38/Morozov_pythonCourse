@@ -2,10 +2,11 @@ from homework3.part2.API.service_controller import ServiceController
 from homework3.part2.validation.bank_pipe import bank_pipe
 from homework3.part2.validation_decorator import validate
 from homework3.part2.error_handler import message_handler
-from homework3.part1.sqlite3_orm import Sqlite_ORM
+from homework3.part1.sqlite3_orm import SQLite3ORM
 from homework3.utils import read_dict_csv
 
-colum_name = "bank"
+
+COLUM_NAME = "bank"
 
 
 class BankService(ServiceController):
@@ -26,9 +27,9 @@ class BankService(ServiceController):
         :return: --> dict with message and status code
         """
 
-        Sqlite_ORM.create(colum_name, bank_data)
+        SQLite3ORM.create(COLUM_NAME, bank_data)
 
-        return message_handler(200,"successfully created bank").data
+        return message_handler(200, "successfully created bank").data
 
     @staticmethod
     def create_many(csv_file_path):
@@ -40,7 +41,7 @@ class BankService(ServiceController):
         """
 
         data = read_dict_csv(csv_file_path)
-        Sqlite_ORM.create_many(colum_name, data)
+        SQLite3ORM.create_many(COLUM_NAME, data)
 
         return message_handler(200, "successfully created banks").data
 
@@ -54,7 +55,7 @@ class BankService(ServiceController):
         :return: --> dict with message and status code
         """
 
-        Sqlite_ORM.update(colum_name, new_date, f"id = {new_date["id"]}")
+        SQLite3ORM.update(COLUM_NAME, new_date, f"id = {new_date["id"]}")
 
         return message_handler(200, "successfully updated bank").data
 
@@ -70,7 +71,7 @@ class BankService(ServiceController):
         return message_handler(
             200,
             "successfully get one bank",
-            Sqlite_ORM.get_one(colum_name, condition)
+            SQLite3ORM.get_one(COLUM_NAME, condition)
         ).data
 
     @staticmethod
@@ -85,7 +86,7 @@ class BankService(ServiceController):
         return message_handler(
             200,
             "successfully get one  bank",
-            Sqlite_ORM.get_many(colum_name, search_by=condition, limit=limit)
+            SQLite3ORM.get_many(COLUM_NAME, search_by=condition, limit=limit)
         ).data
 
     @staticmethod
@@ -98,7 +99,7 @@ class BankService(ServiceController):
         """
 
         if not isinstance(input_id, int):
-           raise message_handler(400, "id must be number")
-        Sqlite_ORM.delete(colum_name,f"id = {input_id}")
+            raise message_handler(400, "id must be number")
+        SQLite3ORM.delete(COLUM_NAME, f"id = {input_id}")
 
         return message_handler(200,  "successfully deleted").data

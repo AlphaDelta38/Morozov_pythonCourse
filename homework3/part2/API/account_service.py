@@ -5,12 +5,12 @@ from homework3.part2.API.currnecy_service import CurrencyService
 from homework3.part2.validation_decorator import validate
 from homework3.part2.error_handler import message_handler
 from homework3.part2.API.bank_service import BankService
-from homework3.part1.sqlite3_orm import Sqlite_ORM
+from homework3.part1.sqlite3_orm import SQLite3ORM
 from homework3.utils import read_dict_csv
 from datetime import datetime
 
 
-colum_name = "account"
+COLUM_NAME = "account"
 
 
 class AccountService(ServiceController):
@@ -20,7 +20,6 @@ class AccountService(ServiceController):
     also realize CRUD pattern
 
     """
-
 
     @staticmethod
     @validate(account_pipe)
@@ -32,7 +31,7 @@ class AccountService(ServiceController):
         :return: --> dict with message and status code
         """
 
-        Sqlite_ORM.create(colum_name, account_data)
+        SQLite3ORM.create(COLUM_NAME, account_data)
 
         return message_handler(200, "successfully created account").data
 
@@ -46,7 +45,7 @@ class AccountService(ServiceController):
         """
 
         data = read_dict_csv(csv_file_path)
-        Sqlite_ORM.create_many(colum_name, data)
+        SQLite3ORM.create_many(COLUM_NAME, data)
 
         return message_handler(200, "successfully created accounts").data
 
@@ -61,7 +60,7 @@ class AccountService(ServiceController):
         :return: --> dict with message and status code
         """
 
-        Sqlite_ORM.update(colum_name, new_date, f"id = {new_date["id"]}")
+        SQLite3ORM.update(COLUM_NAME, new_date, f"id = {new_date["id"]}")
 
         return message_handler(200, "successfully updated account").data
 
@@ -76,7 +75,7 @@ class AccountService(ServiceController):
 
         if not isinstance(input_id, int):
             raise message_handler(400, "id must be number")
-        Sqlite_ORM.delete(colum_name,f"id = {input_id}")
+        SQLite3ORM.delete(COLUM_NAME, f"id = {input_id}")
 
         return message_handler(200, "successfully deleted account").data
 
@@ -92,7 +91,7 @@ class AccountService(ServiceController):
         return message_handler(
             200,
             "successfully got one  account",
-            Sqlite_ORM.get_one(colum_name, condition)
+            SQLite3ORM.get_one(COLUM_NAME, condition)
         ).data
 
     @staticmethod
@@ -107,7 +106,7 @@ class AccountService(ServiceController):
         return message_handler(
             200,
             "successfully got many  account",
-            Sqlite_ORM.get_many(colum_name, search_by=condition, limit=limit)
+            SQLite3ORM.get_many(COLUM_NAME, search_by=condition, limit=limit)
         ).data
 
     @staticmethod
@@ -136,8 +135,8 @@ class AccountService(ServiceController):
             to_currency=receiver_account["currency"],
             amount=amount)["response"]
 
-        AccountService.update(id=sender_account["id"], amount= float(sender_account["amount"]) - float(amount))
-        AccountService.update(id=receiver_account["id"], amount= float(receiver_account["amount"]) + converted_currency)
+        AccountService.update(id=sender_account["id"], amount=float(sender_account["amount"]) - float(amount))
+        AccountService.update(id=receiver_account["id"], amount=float(receiver_account["amount"]) + converted_currency)
 
         bank_sender = BankService.get_one(f"id = {sender_account['bank_id']}")["response"]
         bank_receiver = BankService.get_one(f"id = {receiver_account['bank_id']}")["response"]
@@ -159,6 +158,3 @@ class AccountService(ServiceController):
         })
 
         return message_handler(200, "successfully transfer between account").data
-
-
-

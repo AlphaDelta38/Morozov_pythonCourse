@@ -1,14 +1,11 @@
-from homework3.part1.constants import DISCOUNT, USER_BIRTHDAY_FORMAT, DATE_FORMAT, TRANSACTION_DATETIME_FORMAT
+from homework3.part1.constants import DISCOUNT, USER_BIRTHDAY_FORMAT, DATE_FORMAT, TRANSACTION_DATETIME_FORMAT, PATHS
 from homework3.utils import get_milliseconds_from_date, clean_text
 from homework3.part2.API.api_controller import api_controller
 from homework3.part2.API.api_constants_endpoints import (
-    USER_ENV_CREATE_ENDPOINT,
     USER_GET_ALL_ENDPOINT,
     USER_GET_ONE_ENDPOINT,
-    ACCOUNT_ENV_CREATE_ENDPOINT,
     ACCOUNT_GET_ALL_ENDPOINT,
     ACCOUNT_GET_ONE_ENDPOINT,
-    BANK_ENV_CREATE_ENDPOINT,
     BANK_GET_ONE_ENDPOINT,
     BANK_GET_ALL_ENDPOINT,
     CURRENCY_TRANSLATE_ENDPOINT,
@@ -27,12 +24,6 @@ def load_data_from_csv():
     :return: --> void
     """
 
-    PATHS = [
-            (USER_ENV_CREATE_ENDPOINT, r"D:\pythonLabs\Morozov_pythonCourse\homework3\users.csv"),
-            (ACCOUNT_ENV_CREATE_ENDPOINT, r"D:\pythonLabs\Morozov_pythonCourse\homework3\accounts.csv"),
-            (BANK_ENV_CREATE_ENDPOINT, r"D:\pythonLabs\Morozov_pythonCourse\homework3\banks.csv")
-    ]
-
     for csv in PATHS:
         api_controller(csv[0], {"csv_file_path": csv[1]})
 
@@ -45,7 +36,7 @@ def get_random_discount_for_users():
     :return: --> user data with additional field (discount)
     """
 
-    users = api_controller(USER_GET_ALL_ENDPOINT,{
+    users = api_controller(USER_GET_ALL_ENDPOINT, {
         "limit": random.randint(1, 10)
     })["response"]
 
@@ -64,13 +55,13 @@ def get_users_with_debts():
     :return: --> user with debts
     """
 
-    debt_accounts = api_controller(ACCOUNT_GET_ALL_ENDPOINT,{
+    debt_accounts = api_controller(ACCOUNT_GET_ALL_ENDPOINT, {
         "condition": "amount < 0"
     })["response"]
 
     user_ids = [str(account["user_id"]) for account in debt_accounts]
 
-    users = api_controller(USER_GET_ALL_ENDPOINT,{
+    users = api_controller(USER_GET_ALL_ENDPOINT, {
         "condition": f"id IN ({", ".join(user_ids)})"
     })["response"]
 
@@ -86,13 +77,13 @@ def get_most_bank_by_capital_using():
     :return: --> name of bank ,with most capital using
     """
 
-    accounts = api_controller(ACCOUNT_GET_ALL_ENDPOINT,{})["response"]
+    accounts = api_controller(ACCOUNT_GET_ALL_ENDPOINT, {})["response"]
 
     bank_sums = {}
 
     for account in accounts:
         time.sleep(4)
-        amount_in_usd = api_controller(CURRENCY_TRANSLATE_ENDPOINT,{
+        amount_in_usd = api_controller(CURRENCY_TRANSLATE_ENDPOINT, {
             "amount": account["amount"],
             "to_currency": "USD",
             "from_currency": account["currency"],
@@ -105,8 +96,10 @@ def get_most_bank_by_capital_using():
             bank_sums[bank_id] = account["amount"]
 
     bank_id_of_max = max(bank_sums, key=bank_sums.get)
-    bank_with_max_capital = api_controller(BANK_GET_ONE_ENDPOINT,
-        {"condition": f"id = {bank_id_of_max}"})["response"]
+    bank_with_max_capital = api_controller(
+        BANK_GET_ONE_ENDPOINT,
+        {"condition": f"id = {bank_id_of_max}"}
+    )["response"]
 
     return bank_with_max_capital["name"]
 
@@ -119,7 +112,7 @@ def get_bank_with_oldest_client():
     :return: --> banks name with oldest client
     """
 
-    users = api_controller(USER_GET_ALL_ENDPOINT,{})["response"]
+    users = api_controller(USER_GET_ALL_ENDPOINT, {})["response"]
     oldest_users = []
 
     max_age = 0
@@ -197,7 +190,7 @@ def get_transaction_information_by_user(fullname, from_date, to_date):
     from_date = get_milliseconds_from_date(from_date, DATE_FORMAT)
     to_date = get_milliseconds_from_date(to_date, DATE_FORMAT)
 
-    return [transaction for transaction in transactions \
+    return [transaction for transaction in transactions
             if from_date >= get_milliseconds_from_date(transaction["datetime"], TRANSACTION_DATETIME_FORMAT) >= to_date
             ]
 
