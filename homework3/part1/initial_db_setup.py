@@ -1,7 +1,7 @@
-from schemas.db_schemas import DB_SCHEMAS
-from sqlite3_orm import Sqlite_ORM
 from dataclasses import asdict
 import os
+from schemas.db_schemas import DB_SCHEMAS
+from sqlite3_orm import Sqlite_ORM
 
 
 def initial_db_setup(unique_user_fullname_flag):

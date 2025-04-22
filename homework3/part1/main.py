@@ -1,4 +1,4 @@
-from homework3.part2.error_handler import CustomException, message_handler
+import argparse
 from realization_of_main import (
     get_random_discount_for_users,
     get_users_with_debts,
@@ -8,8 +8,8 @@ from realization_of_main import (
     get_transaction_information_by_user
 )
 from initial_db_setup import initial_db_setup
+from homework3.part2.error_handler import CustomException, message_handler
 from homework3.logger import get_logger
-import argparse
 
 
 logger = get_logger()
