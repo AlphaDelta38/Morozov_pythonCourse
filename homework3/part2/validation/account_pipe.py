@@ -1,5 +1,8 @@
-from homework3.part2.error_handler import message_handler
 import re
+from homework3.part2.error_handler import message_handler
+
+
+# pylint: disable=too-many-boolean-expressions
 
 
 def account_pipe(**data):
@@ -16,7 +19,6 @@ def account_pipe(**data):
     account_number_pattern = r"[a-zA-Z]{1,3}-\d+-"
     currency_pattern = r'^[A-Z]{3}$'
 
-    # pycodestyle: disable=E129
     if (
         "bank_id" in data and not isinstance(data["bank_id"], int) or
         "user_id" in data and not isinstance(data["user_id"], int) or

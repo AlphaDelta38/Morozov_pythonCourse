@@ -1,10 +1,10 @@
+import os
+import requests
+from dotenv import load_dotenv
 from homework3.part2.validation.currency_translate_pipe import translate_pipe
 from homework3.part2.API.service_controller import ServiceController
 from homework3.part2.validation_decorator import validate
 from homework3.part2.error_handler import message_handler
-from dotenv import load_dotenv
-import requests
-import os
 
 
 load_dotenv()

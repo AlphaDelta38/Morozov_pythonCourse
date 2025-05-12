@@ -37,12 +37,16 @@ def test_fetch_data(input_data, expected):
     else:
         assert result is None
 
-
-def test_process_mock_object_raises_nameerror():
+@pytest.mark.parametrize(
+    "input_data, expected",
+    [(10, 20), (-10, None)]
+    )
+def test_process_mock_object_raises_nameerror(input_data, expected):
     mock = MagicMock()
-    mock.value = 1
-    with pytest.raises(NameError):
-        process_mock_object(mock)
+    mock.value = input_data
+    result = process_mock_object(mock)
+    assert expected == result
+
 
 
 def test_process_mock_object_returns_none():

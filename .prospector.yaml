@@ -31,13 +31,9 @@ pylint:
         ignored-classes: pytest
 
     disable:
-        - C0302
         - W0142
         - W0141
-        - E0401
-        - C0411
-        - C0412
         - W0718
-        - E1120
-        - E1123
-        - R0916
+        - import-error # Unable to import
+        - no-value-for-parameter  # E1120
+        - unexpected-keyword-arg  # E1123

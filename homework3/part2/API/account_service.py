@@ -1,3 +1,4 @@
+from datetime import datetime
 from homework3.part2.API.transaction_service import TransactionService
 from homework3.part2.API.service_controller import ServiceController
 from homework3.part2.validation.account_pipe import account_pipe
@@ -7,7 +8,6 @@ from homework3.part2.error_handler import message_handler
 from homework3.part2.API.bank_service import BankService
 from homework3.part1.sqlite3_orm import SQLite3ORM
 from homework3.utils import read_dict_csv
-from datetime import datetime
 
 
 COLUM_NAME = "account"

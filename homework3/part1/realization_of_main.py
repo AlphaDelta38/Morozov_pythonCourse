@@ -1,3 +1,5 @@
+import random
+import time
 from homework3.part1.constants import DISCOUNT, USER_BIRTHDAY_FORMAT, DATE_FORMAT, TRANSACTION_DATETIME_FORMAT, PATHS
 from homework3.utils import get_milliseconds_from_date, clean_text
 from homework3.part2.API.api_controller import api_controller
@@ -11,8 +13,6 @@ from homework3.part2.API.api_constants_endpoints import (
     CURRENCY_TRANSLATE_ENDPOINT,
     TRANSACTION_GET_ALL_ENDPOINT,
 )
-import random
-import time
 
 
 def load_data_from_csv():
