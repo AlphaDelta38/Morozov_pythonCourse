@@ -1,0 +1,39 @@
+inherits:
+  - strictness_high
+
+
+ignore:
+  - venv
+  - test
+  - .pytest_cache/
+
+
+output-format: grouped
+
+
+test-warnings: false
+doc-warnings: false
+
+
+autodetect: false
+
+
+pep8:
+    run: true
+    options:
+        max-line-length: 120
+
+
+pylint:
+    run: true
+    options:
+        max-line-length: 120
+        ignored-classes: pytest
+
+    disable:
+        - W0142
+        - W0141
+        - W0718
+        - import-error # Unable to import
+        - no-value-for-parameter  # E1120
+        - unexpected-keyword-arg  # E1123

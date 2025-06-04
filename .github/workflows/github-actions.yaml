@@ -1,0 +1,29 @@
+name: homework4 after-push checks
+run-name: lets see
+
+on:
+  workflow_dispatch:
+  push:
+
+
+jobs:
+  Custom-pipeline:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up Python 3.12
+        uses: actions/setup-python@v3
+        with:
+          python-version: '3.12'
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install prospector[with_everything] pytest python-dotenv
+      - name: Set PYTHONPATH
+        run: echo "PYTHONPATH=$(pwd)" >> $GITHUB_ENV
+      - name: linter
+        run:
+          prospector homework3 --profile .prospector.yaml
+      - name: unit-tests
+        run:
+          pytest
