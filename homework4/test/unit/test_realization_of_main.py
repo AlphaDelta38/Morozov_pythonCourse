@@ -1,15 +1,14 @@
+from constants import USERS, get_accounts, BANKS, TRANSACTIONS, SIDE_EFFECT_TRANSACTIONS_INFORMATION_BY_USER
+from homework3.part1.constants import DISCOUNT
+from unittest.mock import patch
+import pytest
 from homework3.part1.realization_of_main import (
-    get_highest_number_of_unique_user_bank,
     get_transaction_information_by_user,
     get_most_bank_by_capital_using,
     get_random_discount_for_users,
     get_bank_with_oldest_client,
     get_users_with_debts
 )
-from constants import USERS, get_accounts, BANKS, TRANSACTIONS, SIDE_EFFECT_TRANSACTIONS_INFORMATION_BY_USER
-from homework3.part1.constants import DISCOUNT
-from unittest.mock import patch
-import pytest
 
 
 @patch("homework3.part1.realization_of_main.api_controller")
@@ -19,8 +18,6 @@ def test_get_random_discount_for_users(mock_api_controller):
     for user in result:
         if not user.get("discount") or not user["discount"] in DISCOUNT:
             assert False
-
-    assert True
 
 
 @patch("homework3.part1.realization_of_main.api_controller", side_effect=[

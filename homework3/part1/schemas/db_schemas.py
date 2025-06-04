@@ -4,68 +4,75 @@ from homework3.part1.orm_constants_templates import (
     PRIMARY_KEY,
     NOT_NULL,
     INTEGER,
-    VARCHAR,
-    DEFAULT,
-    UNIQUES,
     UNIQUE,
-    ENUM,
-    REAL
+    REAL,
+    create_varchar,
+    create_default,
+    create_uniques,
+    create_enum,
 )
 
 
 @dataclass
-class DB_Schema:
+class DBSchema:
     table_name: str
     colum_settings: Dict[str, List[str]]
     add: List[str] = None
 
 
-account_schema = DB_Schema(
+account_schema = DBSchema(
     table_name="Account",
     colum_settings={
         "id": [INTEGER, PRIMARY_KEY],
         "user_id": [INTEGER, NOT_NULL],
-        "type": [VARCHAR(15), ENUM("type", ["credit", "debit"]), NOT_NULL],
-        "account_number": [VARCHAR(19), NOT_NULL, UNIQUE],
+        "type": [create_varchar(15), create_enum("type", ["credit", "debit"]), NOT_NULL],
+        "account_number": [create_varchar(19), NOT_NULL, UNIQUE],
         "bank_id": [INTEGER, NOT_NULL],
-        "currency": [VARCHAR(50), NOT_NULL],
+        "currency": [create_varchar(50), NOT_NULL],
         "amount": [REAL, NOT_NULL],
-        "status": [VARCHAR(15), ENUM("status", ["gold", "silver", "platinum", "NULL"]), DEFAULT("NULL")],
+        "status": [
+            create_varchar(15),
+            create_enum(
+                "status",
+                ["gold", "silver", "platinum", "NULL"]
+            ),
+            create_default("NULL")
+        ],
     },
 )
 
-bank_schema = DB_Schema(
+bank_schema = DBSchema(
     table_name="Bank",
     colum_settings={
         "id": [INTEGER, PRIMARY_KEY],
-        "name": [VARCHAR(255), NOT_NULL, UNIQUE]
+        "name": [create_varchar(255), NOT_NULL, UNIQUE]
     },
 )
 
-transaction_schema = DB_Schema(
+transaction_schema = DBSchema(
     table_name="Transactions",
     colum_settings={
         "id": [INTEGER, PRIMARY_KEY],
-        "bank_sender_name": [VARCHAR(122), NOT_NULL],
+        "bank_sender_name": [create_varchar(122), NOT_NULL],
         "account_sender_id": [INTEGER, NOT_NULL],
-        "bank_receiver_name": [VARCHAR(122), NOT_NULL],
+        "bank_receiver_name": [create_varchar(122), NOT_NULL],
         "account_receiver_id": [INTEGER, NOT_NULL],
-        "sent_currency": [VARCHAR(50), NOT_NULL],
+        "sent_currency": [create_varchar(50), NOT_NULL],
         "sent_amount": [REAL, NOT_NULL],
-        "datetime": [VARCHAR(100)],
+        "datetime": [create_varchar(100)],
     },
 )
 
-user_schema = DB_Schema(
+user_schema = DBSchema(
     table_name="User",
     colum_settings={
         "id": [INTEGER, PRIMARY_KEY],
-        "name": [VARCHAR(122), NOT_NULL],
-        "surname": [VARCHAR(122), NOT_NULL],
-        "birth_day": [VARCHAR(32)],
-        "accounts": [VARCHAR(122)],
+        "name": [create_varchar(122), NOT_NULL],
+        "surname": [create_varchar(122), NOT_NULL],
+        "birth_day": [create_varchar(32)],
+        "accounts": [create_varchar(122)],
     },
-    add=[UNIQUES(["name", "surname"])]
+    add=[create_uniques(["name", "surname"])]
 )
 
 
@@ -75,10 +82,3 @@ DB_SCHEMAS = [
     bank_schema,
     user_schema
 ]
-
-
-
-
-
-
-

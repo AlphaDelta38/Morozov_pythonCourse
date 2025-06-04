@@ -6,7 +6,7 @@ def add_numbers(a, b):
 
 
 def is_even(number):
-    return True if number % 2 == 0 else False
+    return  number % 2 == 0
 
 
 def fetch_data(url):
@@ -15,7 +15,7 @@ def fetch_data(url):
 
 
 def process_mock_object(obj):
-    return mock_obj.value * 2 if obj.value > 0 else None
+    return obj.value * 2 if obj.value > 0 else None
 
 
 def run_data_pipeline(data_processor):

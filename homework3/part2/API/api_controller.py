@@ -33,4 +33,4 @@ def api_controller(path, data):
     except Exception as e:
         print("error", e)
         error = e if isinstance(e, CustomException) else message_handler(500, str(e))
-        raise error
+        raise error from e

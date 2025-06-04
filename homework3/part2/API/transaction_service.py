@@ -1,10 +1,10 @@
 from homework3.part2.API.service_controller import ServiceController
 from homework3.part2.error_handler import message_handler
-from homework3.part1.sqlite3_orm import Sqlite_ORM
+from homework3.part1.sqlite3_orm import SQLite3ORM
 from homework3.utils import read_dict_csv
 
 
-colum_name = "transactions"
+COLUM_NAME = "transactions"
 
 
 class TransactionService(ServiceController):
@@ -24,7 +24,7 @@ class TransactionService(ServiceController):
         :return: --> dict with message and status code
         """
 
-        Sqlite_ORM.create(colum_name, transaction_data)
+        SQLite3ORM.create(COLUM_NAME, transaction_data)
 
         return message_handler(200, "successfully created transaction").data
 
@@ -38,7 +38,7 @@ class TransactionService(ServiceController):
         """
 
         data = read_dict_csv(csv_file_path)
-        Sqlite_ORM.create_many(colum_name, data)
+        SQLite3ORM.create_many(COLUM_NAME, data)
 
         return message_handler(200, "successfully created many transaction").data
 
@@ -51,9 +51,7 @@ class TransactionService(ServiceController):
         :return: --> dict with message and status code
         """
 
-
-        search_id, *args = new_date.values()
-        Sqlite_ORM.update(colum_name, new_date, f"id = {search_id}")
+        SQLite3ORM.update(COLUM_NAME, new_date, f"id = {new_date["id"]}")
 
         return message_handler(200, "successfully updated transaction").data
 
@@ -68,7 +66,7 @@ class TransactionService(ServiceController):
 
         if not isinstance(input_id, int):
             raise message_handler(400, "id must be number")
-        Sqlite_ORM.delete(colum_name,f"id = {input_id}")
+        SQLite3ORM.delete(COLUM_NAME, f"id = {input_id}")
 
         return message_handler(200, "successfully deleted transaction").data
 
@@ -84,7 +82,7 @@ class TransactionService(ServiceController):
         return message_handler(
             200,
             "successfully got one transaction",
-            Sqlite_ORM.get_one(colum_name, condition)
+            SQLite3ORM.get_one(COLUM_NAME, condition)
         ).data
 
     @staticmethod
@@ -99,5 +97,5 @@ class TransactionService(ServiceController):
         return message_handler(
             200,
             "successfully got many transaction",
-            Sqlite_ORM.get_many(colum_name, search_by=condition, limit=limit)
+            SQLite3ORM.get_many(COLUM_NAME, search_by=condition, limit=limit)
         ).data

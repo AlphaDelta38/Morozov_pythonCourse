@@ -1,5 +1,5 @@
-from homework3.part2.error_handler import message_handler
 import re
+from homework3.part2.error_handler import message_handler
 
 
 def translate_pipe(from_currency, to_currency, amount):

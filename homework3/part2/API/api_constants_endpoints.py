@@ -1,6 +1,3 @@
-
-# // constants endpoints User // #
-
 # User endpoints
 USER_ENV_CREATE_ENDPOINT = "user/createMany"
 USER_CREATE_ENDPOINT = "user/create"

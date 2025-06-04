@@ -1,6 +1,10 @@
 import logging
 
-def get_logger(log_level=logging.INFO, log_file_name="file.log", log_format= "%(asctime)s - %(levelname)s - %(name)s - %(message)s"):
+
+BASE_FORMAT = "%(asctime)s - %(levelname)s - %(name)s - %(message)s"
+
+
+def get_logger(log_level=logging.INFO, log_file_name="file.log", log_format=BASE_FORMAT):
     file_logger = logging.getLogger("file_logger")
     file_logger.setLevel(log_level)
 

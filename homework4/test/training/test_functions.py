@@ -1,4 +1,4 @@
-from homework5.test.training.functions import (
+from homework4.test.training.functions import (
     process_mock_object,
     run_data_pipeline,
     check_even_odd,
@@ -37,12 +37,16 @@ def test_fetch_data(input_data, expected):
     else:
         assert result is None
 
-
-def test_process_mock_object_raises_nameerror():
+@pytest.mark.parametrize(
+    "input_data, expected",
+    [(10, 20), (-10, None)]
+    )
+def test_process_mock_object_raises_nameerror(input_data, expected):
     mock = MagicMock()
-    mock.value = 1
-    with pytest.raises(NameError):
-        process_mock_object(mock)
+    mock.value = input_data
+    result = process_mock_object(mock)
+    assert expected == result
+
 
 
 def test_process_mock_object_returns_none():
@@ -66,7 +70,7 @@ def test_divide_numbers(input_data, expected):
     assert result == expected
 
 
-@patch("homework5.test.training.functions.requests.get")
+@patch("homework4.test.training.functions.requests.get")
 def test_check_even_odd(mock_req):
     mock_response_1 = MagicMock()
     mock_response_1.json.return_value = {"results": [{"value": 2}]}
